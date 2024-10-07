@@ -1,0 +1,11 @@
+id,name,description,author,producer,genres,characteristics,PEGI,duration,yearOfPublish
+17,Spider-Man: No Way Home,Spider-Man faces multiverse chaos,Chris McKenna,Kevin Feige,ACTION,BLOCKBUSTER,PEGI_12,148,2021
+18,The Lord of the Rings: The Fellowship of the Ring,A group embarks on a journey to destroy a powerful ring,J.R.R. Tolkien,Peter Jackson,HISTORICAL,AWARD_WINNING,PEGI_12,178,2001
+19,Schindler's List,A businessman saves Jewish lives during WWII,Steven Zaillian,Steven Spielberg,HISTORICAL,AWARD_WINNING,PEGI_16,195,1993
+20,Black Panther,A superhero from Wakanda fights to protect his nation,Ryan Coogler,Kevin Feige,ACTION,BLOCKBUSTER,PEGI_12,134,2018
+21,Mad Max: Fury Road,Post-apocalyptic action in a desert wasteland,George Miller,Doug Mitchell,ACTION,IMAX,PEGI_16,120,2015
+22,Shutter Island,A U.S. Marshal investigates a mysterious disappearance,Dennis Lehane,Martin Scorsese,THRILLER,FEATURE_LENGTH,PEGI_16,138,2010
+23,The Lion King,A lion cub's journey to become king of the jungle,Irene Mecchi,Don Hahn,ANIMATION,BLOCKBUSTER,PEGI_7,118,1994
+24,Ford v Ferrari,The true story of Ford's quest to beat Ferrari at Le Mans,Jez Butterworth,Peter Chernin,DRAMA,AWARD_WINNING,PEGI_12,152,2019
+25,The Shawshank Redemption,A banker is imprisoned for a crime he didn’t commit,Stephen King,Frank Darabont,DRAMA,FEATURE_LENGTH,PEGI_16,142,1994
+26,Star Wars: A New Hope,A young farm boy becomes the galaxy's last hope,George Lucas,Gary Kurtz,ACTION,IMAX,PEGI_12,121,1977
