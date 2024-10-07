@@ -19,5 +19,5 @@ public enum MovieGenre {
     MUSICAL,
     WAR,
     WESTERN,
-    HISTORICAL;
+    HISTORICAL
 }

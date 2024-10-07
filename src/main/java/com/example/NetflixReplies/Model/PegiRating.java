@@ -5,5 +5,5 @@ public enum PegiRating {
     PEGI_7,
     PEGI_12,
     PEGI_16,
-    PEGI_18;
+    PEGI_18
 }

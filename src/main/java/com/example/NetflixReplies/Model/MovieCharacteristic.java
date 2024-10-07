@@ -25,5 +25,5 @@ public enum MovieCharacteristic {
     CRITICALLY_ACCLAIMED,
     AWARD_WINNING,
     STREAMING,
-    THEATRICAL_RELEASE;
+    THEATRICAL_RELEASE
 }

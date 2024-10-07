@@ -7,7 +7,6 @@ import com.example.NetflixReplies.Model.PegiRating;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.Vector;
@@ -17,7 +16,6 @@ public class NetflixRepliesRepository {
     private Vector<Film> filmsCollection;
     private static File file_archive;
     private static final String HEADER = "id,name,description,author,producer,genres,characteristics,PEGI,duration,yearOfPublish\n";
-    private static final String PATH_FILE_TO_ADD = "src/main/java/com/example/NetflixReplies/Model/filmToAdd.csv";
 
     public NetflixRepliesRepository() {
         String FILE_PATH = "src/main/java/com/example/NetflixReplies/Model/films.csv";
