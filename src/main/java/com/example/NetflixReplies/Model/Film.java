@@ -30,8 +30,10 @@ public class Film {
     private PegiRating PEGI;
     private int duration;
     private int yearOfPublish;
+    private String img;
+    private String imgUrl;
 
-    public Film(String name, String description, String author, String producer, MovieGenre genres, MovieCharacteristic characteristics, PegiRating PEGI, int duration, int yearOfPublish) {
+    public Film(String name, String description, String author, String producer, MovieGenre genres, MovieCharacteristic characteristics, PegiRating PEGI, int duration, int yearOfPublish, String img) {
         this.id = generateNewId();
         this.name = name;
         this.description = description;
@@ -42,9 +44,10 @@ public class Film {
         this.PEGI = PEGI;
         this.duration = duration;
         this.yearOfPublish = yearOfPublish;
+        this.img = img;
     }
 
-    public Film(int id, String name, String description, String author, String producer, MovieGenre genres, MovieCharacteristic characteristics, PegiRating PEGI, int duration, int yearOfPublish) {
+    public Film(int id, String name, String description, String author, String producer, MovieGenre genres, MovieCharacteristic characteristics, PegiRating PEGI, int duration, int yearOfPublish, String img) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -55,9 +58,26 @@ public class Film {
         this.PEGI = PEGI;
         this.duration = duration;
         this.yearOfPublish = yearOfPublish;
+        this.img = img;
     }
     public Film(){
 
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public int generateNewId() {

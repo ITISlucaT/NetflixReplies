@@ -4,6 +4,7 @@ import com.example.NetflixReplies.Model.Film;
 import com.example.NetflixReplies.Model.MovieGenre;
 import com.example.NetflixReplies.Repository.NetflixRepliesRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.Vector;
@@ -26,6 +27,7 @@ public class NetflixRepliesService {
    //POST
     public boolean addNewFilm(Film filmToAdd){return repository.addNewFilm(filmToAdd);}
     public boolean fuseCSVs(File fileToAdd){return repository.fuseCSVs(fileToAdd);}
+    public boolean addImageToFilm(int id, MultipartFile imageToAdd){return repository.addImageToFilm(id, imageToAdd);}
 
     //PUT
     public boolean updateFilm(Film film){return repository.updateFilm(film);}

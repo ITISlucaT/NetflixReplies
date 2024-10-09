@@ -3,8 +3,10 @@ package com.example.NetflixReplies.Controller;
 import com.example.NetflixReplies.Model.Film;
 import com.example.NetflixReplies.Model.MovieGenre;
 import com.example.NetflixReplies.Service.NetflixRepliesService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.util.Vector;
 @RestController
 @RequestMapping("/api/films")
 
-
+@CrossOrigin
 public class NetflixRepliesController {
     NetflixRepliesService service;
     public NetflixRepliesController(){
@@ -21,7 +23,9 @@ public class NetflixRepliesController {
     }
 
     @GetMapping
-    public Vector<Film> getFilms(){return service.getFilms();}
+    public Vector<Film> getFilms(){
+        return service.getFilms();
+    }
 
     @GetMapping("/genres/{genre}")
     public Vector<Film> getFilmsByGenre(@PathVariable String genre) {
@@ -30,7 +34,10 @@ public class NetflixRepliesController {
     }
 
     @GetMapping("/name/normal/{name}")
-    public Vector<Film> getFilmsByName(@PathVariable String name){return service.getFilmsByName(name);}
+    public Vector<Film> getFilmsByName(@PathVariable String name){
+
+        return service.getFilmsByName(name);
+    }
 
     @GetMapping("/name-of-author/{nameOfAuthor}")
     public Vector<Film> getFilmsByAuthor(@PathVariable String nameOfAuthor){
@@ -41,7 +48,9 @@ public class NetflixRepliesController {
     public Vector<Film> getFilmsSortedByName(){return service.getFilmsSortedByName();}
 
     @GetMapping("/id/{id}")
-    public Film findFilmById(@PathVariable int id){return service.findFilmById(id);}
+    public Film findFilmById(@PathVariable int id){
+        return service.findFilmById(id);
+    }
 
     @GetMapping("/suggest")
     public Film suggestAFilm(){return service.suggestAFilm();}
@@ -71,6 +80,11 @@ public class NetflixRepliesController {
         return service.fuseCSVs(convFile);
     }
 
+    @PostMapping("/add-image/{id}")
+    public boolean addImageToFilm(@PathVariable int id, @RequestParam("imageToAdd") MultipartFile imageToAdd){
+        return service.addImageToFilm(id, imageToAdd);
+    }
+
     //PUT
     @PutMapping("/update")
     public boolean updateFilm(@RequestBody Film film){
@@ -80,4 +94,6 @@ public class NetflixRepliesController {
     @DeleteMapping("/delete/{idFilm}")
     public boolean removeFilm(@PathVariable int idFilm){
         return service.removeFilm(idFilm);}
+
+
 }

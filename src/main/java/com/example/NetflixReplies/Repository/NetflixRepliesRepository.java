@@ -5,8 +5,13 @@ import com.example.NetflixReplies.Model.MovieCharacteristic;
 import com.example.NetflixReplies.Model.MovieGenre;
 import com.example.NetflixReplies.Model.PegiRating;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.Vector;
@@ -16,6 +21,8 @@ public class NetflixRepliesRepository {
     private Vector<Film> filmsCollection;
     private static File file_archive;
     private static final String HEADER = "id,name,description,author,producer,genres,characteristics,PEGI,duration,yearOfPublish\n";
+    private static final String SERVER_ADDRESS = "http://localhost:8080/";
+    private static final String IMAGES_DIR = "src/main/resources/static/images/";
 
     public NetflixRepliesRepository() {
         String FILE_PATH = "src/main/java/com/example/NetflixReplies/Model/films.csv";
@@ -40,7 +47,9 @@ public class NetflixRepliesRepository {
                         + m.getCharacteristics().toString() + ","
                         + m.getPEGI().toString() + ","
                         + m.getDuration() + ","
-                        + m.getYearOfPublish() + "\n");
+                        + m.getYearOfPublish() + ","
+                        + m.getImg()+
+                        "\n");
             }
             bw.flush();
             bw.close();
@@ -67,13 +76,16 @@ public class NetflixRepliesRepository {
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
 
-                result.add(new Film(Integer.parseInt(values[0]), values[1], values[2], values[3], values[4], MovieGenre.valueOf(values[5].toUpperCase()), MovieCharacteristic.valueOf(values[6].toUpperCase()), PegiRating.valueOf(values[7].toUpperCase()), Integer.parseInt(values[8]), Integer.parseInt(values[9])));
+                result.add(new Film(Integer.parseInt(values[0]), values[1], values[2], values[3], values[4], MovieGenre.valueOf(values[5].toUpperCase()), MovieCharacteristic.valueOf(values[6].toUpperCase()), PegiRating.valueOf(values[7].toUpperCase()), Integer.parseInt(values[8]), Integer.parseInt(values[9]), values[10]));
             }
             br.close();
             fr.close();
         } catch (IOException e) {
             System.out.println("Something went wrong while reading the file");
             System.out.println(e.getMessage());
+        }
+        for(Film film: result) {
+            film.setImgUrl(SERVER_ADDRESS + film.getImg());
         }
         this.filmsCollection.clear();
         this.filmsCollection.addAll(result);
@@ -96,7 +108,7 @@ public class NetflixRepliesRepository {
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
 
-                result.add(new Film(Integer.parseInt(values[0]), values[1], values[2], values[3], values[4], MovieGenre.valueOf(values[5].toUpperCase()), MovieCharacteristic.valueOf(values[6].toUpperCase()), PegiRating.valueOf(values[7].toUpperCase()), Integer.parseInt(values[8]), Integer.parseInt(values[9])));
+                result.add(new Film(Integer.parseInt(values[0]), values[1], values[2], values[3], values[4], MovieGenre.valueOf(values[5].toUpperCase()), MovieCharacteristic.valueOf(values[6].toUpperCase()), PegiRating.valueOf(values[7].toUpperCase()), Integer.parseInt(values[8]), Integer.parseInt(values[9]), values[10]));
             }
             br.close();
             fr.close();
@@ -175,6 +187,33 @@ public class NetflixRepliesRepository {
         System.out.println("Film already added");
         return false;
     }
+/*
+* TOR Vado a scrivere il file nella cartella di immagini statiche aggiornando url e path
+* */
+    public boolean addImageToFilm(int id, MultipartFile imageToAdd){
+        String fileName = imageToAdd.getOriginalFilename();
+
+        Path imagePath = Paths.get(IMAGES_DIR + fileName);
+        try {
+            Files.write(imagePath, imageToAdd.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String imageUrl = "images/" + fileName;
+        Film filmToUpdate = findFilmById(id);
+        filmToUpdate.setImg(imageUrl);
+
+        return writeURLimg(id);
+    }
+    private boolean writeURLimg(int id){
+        Film filmToUpdate = findFilmById(id);
+        if(filmToUpdate!= null){
+            filmToUpdate.setImgUrl(SERVER_ADDRESS + filmToUpdate.getImg());
+            return saveInCSV();
+        }
+        return false;
+    }
+
 
     public Film findFilmById(int id) {
         for (Film film : this.filmsCollection) {
@@ -213,17 +252,17 @@ public class NetflixRepliesRepository {
 
 
     public static void main(String[] args) {
-        Film film1 = new Film("Inception", "A mind-bending thriller", "Christopher Nolan", "Emma Thomas", MovieGenre.SCIENCE_FICTION, MovieCharacteristic.THREE_D, PegiRating.PEGI_12, 148, 2010);
-        Film film2 = new Film("The Dark Knight", "A dark take on Batman", "Christopher Nolan", "Charles Roven", MovieGenre.ACTION, MovieCharacteristic.IMAX, PegiRating.PEGI_12, 152, 2008);
-        Film film3 = new Film("Interstellar", "A journey through space and time", "Jonathan Nolan", "Emma Thomas", MovieGenre.SCIENCE_FICTION, MovieCharacteristic.FEATURE_LENGTH, PegiRating.PEGI_12, 169, 2014);
-        Film film4 = new Film("Parasite", "A tale of social inequality", "Bong Joon-ho", "Kwak Sin-ae", MovieGenre.DRAMA, MovieCharacteristic.INDEPENDENT, PegiRating.PEGI_16, 132, 2019);
-        Film film5 = new Film("Avengers: Endgame", "Superheroes unite to defeat Thanos", "Christopher Markus", "Kevin Feige", MovieGenre.ACTION, MovieCharacteristic.BLOCKBUSTER, PegiRating.PEGI_12, 181, 2019);
-        Film film6 = new Film("The Matrix", "A hacker discovers a simulated reality", "The Wachowskis", "Joel Silver", MovieGenre.SCIENCE_FICTION, MovieCharacteristic.TALKIE, PegiRating.PEGI_16, 136, 1999);
-        Film film7 = new Film("Titanic", "A romance aboard the ill-fated ship", "James Cameron", "James Cameron", MovieGenre.ROMANCE, MovieCharacteristic.COLOR, PegiRating.PEGI_12, 195, 1997);
-        Film film8 = new Film("Gladiator", "A Roman general seeks revenge", "David Franzoni", "Douglas Wick", MovieGenre.HISTORICAL, MovieCharacteristic.AWARD_WINNING, PegiRating.PEGI_16, 155, 2000);
-        Film film9 = new Film("The Godfather", "The saga of an Italian-American crime family", "Mario Puzo", "Albert S. Ruddy", MovieGenre.CRIME, MovieCharacteristic.CULT_CLASSIC, PegiRating.PEGI_18, 175, 1972);
-        Film film10 = new Film("Joker", "The origin story of Gotham's most notorious villain", "Todd Phillips", "Bradley Cooper", MovieGenre.DRAMA, MovieCharacteristic.SILENT, PegiRating.PEGI_18, 122, 2019);
-        Film film11 = new Film("Joker", "The origin story of Gotham's most notorious villain", "Todd Phillips", "Bradley Cooper", MovieGenre.DRAMA, MovieCharacteristic.SILENT, PegiRating.PEGI_18, 122, 2019);
+//        Film film1 = new Film("Inception", "A mind-bending thriller", "Christopher Nolan", "Emma Thomas", MovieGenre.SCIENCE_FICTION, MovieCharacteristic.THREE_D, PegiRating.PEGI_12, 148, 2010);
+//        Film film2 = new Film("The Dark Knight", "A dark take on Batman", "Christopher Nolan", "Charles Roven", MovieGenre.ACTION, MovieCharacteristic.IMAX, PegiRating.PEGI_12, 152, 2008);
+//        Film film3 = new Film("Interstellar", "A journey through space and time", "Jonathan Nolan", "Emma Thomas", MovieGenre.SCIENCE_FICTION, MovieCharacteristic.FEATURE_LENGTH, PegiRating.PEGI_12, 169, 2014);
+//        Film film4 = new Film("Parasite", "A tale of social inequality", "Bong Joon-ho", "Kwak Sin-ae", MovieGenre.DRAMA, MovieCharacteristic.INDEPENDENT, PegiRating.PEGI_16, 132, 2019);
+//        Film film5 = new Film("Avengers: Endgame", "Superheroes unite to defeat Thanos", "Christopher Markus", "Kevin Feige", MovieGenre.ACTION, MovieCharacteristic.BLOCKBUSTER, PegiRating.PEGI_12, 181, 2019);
+//        Film film6 = new Film("The Matrix", "A hacker discovers a simulated reality", "The Wachowskis", "Joel Silver", MovieGenre.SCIENCE_FICTION, MovieCharacteristic.TALKIE, PegiRating.PEGI_16, 136, 1999);
+//        Film film7 = new Film("Titanic", "A romance aboard the ill-fated ship", "James Cameron", "James Cameron", MovieGenre.ROMANCE, MovieCharacteristic.COLOR, PegiRating.PEGI_12, 195, 1997);
+//        Film film8 = new Film("Gladiator", "A Roman general seeks revenge", "David Franzoni", "Douglas Wick", MovieGenre.HISTORICAL, MovieCharacteristic.AWARD_WINNING, PegiRating.PEGI_16, 155, 2000);
+//        Film film9 = new Film("The Godfather", "The saga of an Italian-American crime family", "Mario Puzo", "Albert S. Ruddy", MovieGenre.CRIME, MovieCharacteristic.CULT_CLASSIC, PegiRating.PEGI_18, 175, 1972);
+//        Film film10 = new Film("Joker", "The origin story of Gotham's most notorious villain", "Todd Phillips", "Bradley Cooper", MovieGenre.DRAMA, MovieCharacteristic.SILENT, PegiRating.PEGI_18, 122, 2019);
+//        Film film11 = new Film("Joker", "The origin story of Gotham's most notorious villain", "Todd Phillips", "Bradley Cooper", MovieGenre.DRAMA, MovieCharacteristic.SILENT, PegiRating.PEGI_18, 122, 2019);
 
         NetflixRepliesRepository n = new NetflixRepliesRepository();
         //n.addNewFilm(film11);
